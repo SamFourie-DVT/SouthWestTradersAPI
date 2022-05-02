@@ -7,5 +7,6 @@ namespace Interfaces.Repository
         Task<Stock> GetAvailableStockForProduct(int Id);
 
         Task<Stock> AddStock(Stock stock);
+
     }
 }
