@@ -13,9 +13,19 @@ namespace Repository
             _data = data;
         }
 
-        public Task<Order> CancelOrder(int Id)
+        public async Task<Order> CancelOrder(int Id)
         {
-            throw new NotImplementedException();
+            var order = _data.Orders.FirstOrDefault(x => x.ProductId == Id);
+
+            if (order == null)
+            {
+                return null;
+            }
+
+            order.OrderStateId = -1;
+            await _data.SaveChangesAsync();
+
+            return order;
         }
 
         public int? GetAvailableStock(int productId)
@@ -49,6 +59,12 @@ namespace Repository
         public Task<Order> SearchOrderByName(string name)
         {
             throw new NotImplementedException();
+        }
+
+        public int GetCurrentStatus(int id)
+        {
+            var currentStatus = _data.Orders.FirstOrDefault(x => x.OrderId == id);
+            return currentStatus.OrderStateId;
         }
     }
 }

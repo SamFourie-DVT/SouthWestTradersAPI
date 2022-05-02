@@ -16,6 +16,8 @@ namespace Interfaces.IRepository
 
         int? GetAvailableStock(int productId);
 
+        int GetCurrentStatus(int id);
+
 
     }
 }

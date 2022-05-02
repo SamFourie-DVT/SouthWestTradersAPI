@@ -62,5 +62,31 @@ namespace SouthWestTradersAPI_KudaTest.Controllers
                 return BadRequest("An Unexpected Error Has Occured. Error Message --> " + ex);
             }
         }
+
+        [HttpPut("Cancel{id}")]
+        public async Task<ActionResult<Order>> Cancel(int id)
+        {
+            try
+            {
+                var currentStatus = _order.GetCurrentStatus(id);
+
+                if (currentStatus == 1)
+                {
+                    return BadRequest("Error - Cannot cancel a completed order.");
+                }
+
+                if (currentStatus == -1)
+                {
+                    return BadRequest("Error - Order has already been cancelled.");
+                }
+
+                var cancelledOrder = await _order.CancelOrder(id);
+                return Ok(cancelledOrder);
+            } 
+            catch (Exception ex)
+            {
+                return BadRequest("An Unexpected Error Has Occured. Error Message --> " + ex);
+            }
+        }
     }
 }
