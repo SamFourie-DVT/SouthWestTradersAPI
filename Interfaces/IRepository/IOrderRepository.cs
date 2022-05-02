@@ -14,7 +14,7 @@ namespace Interfaces.IRepository
 
         Task<List<Order>> GetAllOrders();
 
-        bool CheckAvailableStock(int productId, int amountOrdered);
+        int? GetAvailableStock(int productId);
 
 
     }

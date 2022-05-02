@@ -18,21 +18,19 @@ namespace Repository
             throw new NotImplementedException();
         }
 
-        public bool CheckAvailableStock(int productId, int amountOrdered)
+        public int? GetAvailableStock(int productId)
         {
             var currentStock = _data.Stocks.FirstOrDefault(x => x.ProductId == productId);
-
-            if (amountOrdered > currentStock.AvailableStock)
-            {
-                return false;
-            }
-
-            return true;
+            return currentStock.AvailableStock;
         }
 
         public async Task<Order> CreateOrder(Order order)
         {
+            var stock = _data.Stocks.FirstOrDefault(x => x.ProductId == order.ProductId);
+
             _data.Orders.Add(order);
+            stock.AvailableStock = stock.AvailableStock - order.Quantity;
+            _data.Stocks.Update(stock);
             await _data.SaveChangesAsync();
             return order;
         }

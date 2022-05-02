@@ -23,9 +23,14 @@ namespace SouthWestTradersAPI_KudaTest.Controllers
                 if (order == null)
                     return BadRequest("Order cannot be null.");
 
-                var checkStock = _order.CheckAvailableStock(order.ProductId, order.Quantity);
+                var availableStock = _order.GetAvailableStock(order.ProductId);
 
-                if (checkStock == false)
+                if (availableStock == 0)
+                {
+                    return BadRequest("Error: No stock for this product");
+                }
+
+                if (availableStock < order.Quantity)
                 {
                     return BadRequest("Error: Not enough stock for this order.");
                 }
